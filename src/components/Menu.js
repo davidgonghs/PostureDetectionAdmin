@@ -1,4 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
+import { Link, Switch, Route } from 'react-router-dom';
+
+// Import your other components or pages here
+import Dashboard from './Dashboard'; // Import your Dashboard component
+import User from './User'; // Import your User component
 
 export default class Menu extends Component {
     render() {
@@ -29,13 +34,20 @@ export default class Menu extends Component {
                                 {/* Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library */}
                                 <li className="nav-item">
-                                    <a href="/#" className="nav-link active">
-                                        <i className="nav-icon fas fa-th"/>
+                                    <Link to="/" className="nav-link ">
+                                        <i className="nav-icon fas fa-tachometer-alt"/>
                                         <p>
-                                            Company
-                                            <span className="right badge badge-danger">New</span>
+                                            Dashboard
                                         </p>
-                                    </a>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link  to="/user" className="nav-link">
+                                        <i className="nav-icon fas fa-user"/>
+                                        <p>
+                                            User
+                                        </p>
+                                    </Link>
                                 </li>
                             </ul>
                         </nav>
