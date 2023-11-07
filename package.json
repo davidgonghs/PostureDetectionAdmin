@@ -18,7 +18,8 @@
     "start": "set port=3008 & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sync": "aws s3 sync --profile 'meech-ward' ./build 's3://admin.posturedetection.com/'"
   },
   "eslintConfig": {
     "extends": [
