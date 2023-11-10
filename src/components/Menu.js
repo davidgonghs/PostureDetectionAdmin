@@ -48,6 +48,13 @@ export default class Menu extends Component {
                                             User
                                         </p>
                                     </Link>
+
+                                    <Link  to="/userLog" className="nav-link">
+                                        <i className="nav-icon fas fa-drivers-license"/>
+                                        <p>
+                                            User Log
+                                        </p>
+                                    </Link>
                                 </li>
                             </ul>
                         </nav>
