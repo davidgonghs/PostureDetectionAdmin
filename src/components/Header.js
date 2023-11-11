@@ -71,17 +71,18 @@ export default class Header extends Component {
                                     {/* Message Start */}
                                     <div className="media">
                                         <img
-                                            src="dist/img/logo.jpg"
-                                            alt="PostureDetection"
+                                            src="dist/img/user2.png"
+                                            alt="User Avatar"
+                                            className="img-size-50 img-circle mr-3"
                                         />
                                         <div className="media-body">
                                             <h3 className="dropdown-item-title">
-                                                Brad Diesel
+                                                David Gong
                                                 <span className="float-right text-sm text-danger">
                   <i className="fas fa-star"/>
                 </span>
                                             </h3>
-                                            <p className="text-sm">Call me whenever you can...</p>
+                                            <p className="text-sm">This is my HCI Assignment, pls join my presentation</p>
                                             <p className="text-sm text-muted">
                                                 <i className="far fa-clock mr-1"/> 4 Hours Ago
                                             </p>
