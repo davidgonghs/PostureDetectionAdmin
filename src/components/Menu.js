@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Link, Switch, Route } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link, Switch, Route} from 'react-router-dom';
 
 // Import your other components or pages here
 import Dashboard from './Dashboard'; // Import your Dashboard component
@@ -8,11 +8,12 @@ import User from './User'; // Import your User component
 export default class Menu extends Component {
     render() {
         return (
+            <div>
                 <aside className="main-sidebar sidebar-dark-primary elevation-4">
                     {/* Brand Logo */}
                     <a href="index.html" className="brand-link">
                         <img src="dist/img/logo.jpg" alt="PostureDetection Logo"
-                             className="brand-image" />
+                             className="brand-image"/>
                         <span className="brand-text font-weight-light">PostureDetection</span>
                     </a>
                     {/* Sidebar */}
@@ -42,17 +43,34 @@ export default class Menu extends Component {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link  to="/user" className="nav-link">
+                                    <Link to="/user" className="nav-link">
                                         <i className="nav-icon fas fa-user"/>
                                         <p>
                                             User
                                         </p>
                                     </Link>
-
-                                    <Link  to="/userLog" className="nav-link">
-                                        <i className="nav-icon fas fa-drivers-license"/>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/userLog" className="nav-link">
+                                        <i className="nav-icon fas fa-clipboard"></i>
                                         <p>
                                             User Log
+                                        </p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/feedback" className="nav-link">
+                                        <i className="nav-icon fas fa-comment-alt"/>
+                                        <p>
+                                            Feedback
+                                        </p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/help" className="nav-link">
+                                        <i className="nav-icon fas fa-question"/>
+                                        <p>
+                                            Help
                                         </p>
                                     </Link>
                                 </li>
@@ -62,6 +80,7 @@ export default class Menu extends Component {
                     </div>
                     {/* /.sidebar */}
                 </aside>
+            </div>
         )
     }
 }
