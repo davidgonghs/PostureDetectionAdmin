@@ -16,10 +16,10 @@ function App() {
 
     useEffect(() => {
         // Fetch the user email and token from local storage
-        const user = JSON.parse(localStorage.getItem("user"))
+        const token = localStorage.getItem('token')
        // const user = localStorage.getItem("user")
         // If the token/email does not exist, mark the user as logged out
-        if (!user || !user.accessToken) {
+        if (!token) {
             setLoggedIn(false)
             return
         }
@@ -28,14 +28,14 @@ function App() {
         fetch(apiUrl+"/auth/verify", {
             method: "GET",
             headers: {
-                'Authorization': `Bearer ${user.accessToken}`,
+                'Authorization': `Bearer ${token}`,
             }
         })
             .then(r => r.json())
             .then(r => {
                 console.log("refresh",r)
                 setLoggedIn('success' === r.message)
-                setUsername(user.username || "")
+                setUsername(localStorage.getItem('username') || "")
             })
     }, [])
 
