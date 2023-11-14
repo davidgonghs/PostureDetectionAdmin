@@ -58,7 +58,7 @@ class FeedbackListCard extends Component {
         const updateUrl = `${this.apiUrl}/feedback/${feedback.id}`;
 
         fetch(updateUrl, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -1,3 +1,11 @@
+
+# upload build file to s3
+```angular2html
+aws s3 cp ./build s3://admin.posturedetection.com --recursive
+```
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

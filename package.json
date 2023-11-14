@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sync": "aws s3 sync --profile 'meech-ward' ./build 's3://admin.posturedetection.com/'"
+    "sync": "aws s3 sync --profile 'meech-ward' ./build 's3://admin.posturedetection.com/'",
+    "invalidate" : "aws cloudfront create-invalidation --profile 'meech-ward' --distribution-id 'E1PHND43V93ERM' --paths '/*'"
   },
   "eslintConfig": {
     "extends": [

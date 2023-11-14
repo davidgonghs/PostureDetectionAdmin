@@ -43,7 +43,7 @@ class FeedbackChartCard extends Component {
         // Add logic to make a PATCH request to update feedback status to 2
         const feedbackId = this.props.parentId; // Replace with the actual feedback ID
         fetch(`${this.apiUrl}/feedback/${feedbackId}`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
