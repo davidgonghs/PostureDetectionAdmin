@@ -16,7 +16,11 @@ class ActivityUserGraphCard extends Component {
 
     fetchDataAndRenderCharts = async () => {
         try {
-            const response = await fetch(`${this.apiUrl}/data/revenue/area`);
+            const response = await fetch(`${this.apiUrl}/data/revenue/area`,{
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+            });
             const data = await response.json();
 
             if (response.ok) {

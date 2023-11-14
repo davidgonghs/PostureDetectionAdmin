@@ -14,7 +14,11 @@ class NewUserGraphCard extends Component {
 
     fetchNewUserData() {
         // Make a request to your API
-        fetch(`${this.apiUrl}/user/count/new-user/lastweek`)
+        fetch(`${this.apiUrl}/user/count/new-user/lastweek`,{
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 this.updateChart(data.data);

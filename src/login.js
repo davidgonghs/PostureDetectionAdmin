@@ -58,7 +58,10 @@ const Login = (props) => {
             .then(r => {
                 if (r.status === 200) {
                    // localStorage.setItem("user", JSON.stringify({username, token: r.token}))
-                    localStorage.setItem("user", JSON.stringify({username, accessToken: r.data.accessToken}))
+                    //get user id
+                    localStorage.setItem("username",  username)
+                    localStorage.setItem("token", r.data.accessToken)
+                    localStorage.setItem("user_id",r.data.id)
                     console.log("r.", r)
                     props.setLoggedIn(true)
                     props.setUsername(username)
@@ -97,7 +100,8 @@ const Login = (props) => {
                                     <span className="fas fa-lock"/>
                                 </div>
                             </div>
-                            <label className="errorLabel">{passwordError}</label>
+
+                            <label className="errorLabel" style={{ color: 'red' }}>{passwordError}</label>
                         </div>
                         <div className="row">
                             <div className="col-8">

@@ -13,7 +13,11 @@ class UserLog extends Component {
     fetchData = (country) => {
         // Construct the URL with the selected country
         const apiUrl = `https://api.posturedetection.com/user-log`;
-        fetch(apiUrl)
+        fetch(apiUrl,{
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 // Check if the response data is an array

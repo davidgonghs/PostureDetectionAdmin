@@ -31,7 +31,11 @@ class FeedbackListCard extends Component {
 
     fetchFeedbackData(page) {
         // Make a request to your API
-        fetch(`${this.apiUrl}/feedback?page=${page}&pageSize=2`)
+        fetch(`${this.apiUrl}/feedback?page=${page}&pageSize=2`,{
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 this.setState({
@@ -61,6 +65,7 @@ class FeedbackListCard extends Component {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
             },
             body: JSON.stringify({
                 id: feedback.id,

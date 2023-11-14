@@ -17,7 +17,11 @@ class User extends Component {
 
     fetchData = (page) => {
         // Construct the URL with the selected page
-        fetch(`${this.apiUrl}/user?page=${page}&pageSize=2`)
+        fetch(`${this.apiUrl}/user?page=${page}&pageSize=2`,{
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            }
+        })
             .then((response) => response.json())
             .then((data) => {
                 // Check if the response data is an object with the expected structure

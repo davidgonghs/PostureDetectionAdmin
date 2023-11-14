@@ -18,7 +18,11 @@ export default class  SmallBoxesContent extends Component {
 
     fetchData = async () => {
         try {
-            const response = await fetch(`${this.apiUrl}/count`);
+            const response = await fetch(`${this.apiUrl}/count`,{
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+            });
             const data = await response.json();
 
             if (response.ok) {
