@@ -1,16 +1,14 @@
 import React, { Component, createRef } from 'react';
 import FeedbackListCard from "./FeedbackListCard";
 import FeedbackChartCard from "./FeedbackChartCard";
-import Child from "./Child";
 
 class Feedback extends Component {
     constructor(props) {
         super(props);
         this.apiUrl = process.env.REACT_APP_API_URL;
-        this.feedbackListCardRef = createRef();
         this.state = {
             parentId: 1,
-            refreshList: false,
+            refreshList: 0,
             feedbackListPage: 1,
             status: null,
             queryString: window.location.search
@@ -23,17 +21,16 @@ class Feedback extends Component {
 
     handleRefresh = () => {
         console.log('feedback 23 handleRefresh')
-
         this.setState({
-            refreshList: true
+            refreshList: 1
         })
-        if (this.state.refreshList) {
-            console.log('feedback feedbackListCardRef')
-            this.feedbackListCardRef.current.fetchFeedbackListData(this.state.feedbackListPage);
-            this.setState({
-                refreshList: false
-            })
-        }
+    }
+
+    handleOnRefreshComplete = () => {
+        console.log('feedback 30 Complete')
+        this.setState({
+            refreshList: 0
+        })
     }
 
 
@@ -98,6 +95,7 @@ class Feedback extends Component {
                                     <FeedbackListCard
                                         onItemClick={this.handleItemClick}
                                         isRefresh={this.state.refreshList}
+                                        onRefreshComplete={this.handleOnRefreshComplete}
                                     />
                                     {/* /.card */}
                                 </section>
@@ -105,7 +103,10 @@ class Feedback extends Component {
                                 {/* right col (We are only adding the ID to make the widgets sortable)*/}
                                 <section className="col-lg-5 connectedSortable">
                                     {/* solid sales graph */}
-                                    <FeedbackChartCard parentId={this.state.parentId} status={this.state.status} onRefresh={this.handleRefresh}/>
+                                    <FeedbackChartCard
+                                        parentId={this.state.parentId}
+                                        status={this.state.status}
+                                        onRefresh={this.handleRefresh}/>
                                     {/* /.card */}
                                 </section>
                             </div>

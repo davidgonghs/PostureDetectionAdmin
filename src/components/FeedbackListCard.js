@@ -16,13 +16,10 @@ class FeedbackListCard extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.isRefresh !== this.props.isRefresh) {
-            console.log('list refreshFeedbackList', this.props.isRefresh);
-            console.log('list props isRefresh', this.props.isRefresh);
-            if (this.props.isRefresh) {
-                console.log('refresh FeedbackList', this.props.isRefresh);
+            if(this.props.isRefresh === 1){
+                console.log('list update');
                 this.fetchFeedbackListData(this.state.currentPage);
-                // Set isRefresh to false after fetching data
-               // this.props.onRefreshComplete();
+                this.props.onRefreshComplete();
             }
         }
     }

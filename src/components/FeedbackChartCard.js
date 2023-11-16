@@ -11,27 +11,35 @@ class FeedbackChartCard extends Component {
             status: this.props.status,
             key: true
         };
-
     }
 
 
 
     componentDidMount() {
         // Fetch data when the component mounts
+        console.log('fc 21')
         this.handleChange();
-        this.fetchFeedbackData(this.props.parentId); // Use the parentId passed as a prop
+        this.fetchFeedbackData(this.state.parentId).then(); // Use the parentId passed as a prop
     }
 
     componentDidUpdate(prevProps) {
-        // Fetch data if parentId prop is updated
-        if (this.props.parentId != prevProps.parentId) {
-            this.handleChange();
-            this.fetchFeedbackData(this.props.parentId);
+        if (this.props.parentId !== prevProps.parentId) {
+            this.fetchFeedbackData(this.props.parentId); // Use the parentId passed as a prop
         }
     }
 
     handleChange() {
         const queryString = window.location.search;
+        console.log('feedbackChartCard handleChange',queryString)
+        if(queryString.length === 0){
+            console.log("fc init")
+            this.setState({
+                parentId: 0,
+                status: 0,
+                key: true
+            })
+            return;
+        }
         const urlParams = new URLSearchParams(queryString);
         const itemId = urlParams.get('itemId');
         const status = urlParams.get('status');
@@ -40,6 +48,7 @@ class FeedbackChartCard extends Component {
             key = true;
         }
         this.setState({
+            feedbackData: [],
             parentId: itemId,
             status: status,
             key: key
@@ -47,6 +56,9 @@ class FeedbackChartCard extends Component {
     }
 
     fetchFeedbackData = async (parentId) => {
+        if(parentId === 0){
+            return;
+        }
         try {
             // Make a request to your API with the parentId
             const response = await fetch(`${this.apiUrl}/feedback/parent/${parentId}`,{
