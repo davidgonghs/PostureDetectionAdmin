@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import {Link} from "react-router-dom";
 
 class FeedbackListCard extends Component {
     constructor(props) {
@@ -9,27 +10,44 @@ class FeedbackListCard extends Component {
             feedbackData: [],
             currentPage: 1,
             totalPages: 1,
+            refreshFeedbackList: this.props.isRefresh,
         };
     }
 
-    handleItemClick = (feedback, currentPage) => {
-        // Make a PATCH request to update the status
-        this.updateStatus(feedback);
-        // Call the parent component's callback function
-        this.props.onItemClick(feedback.id, currentPage);
-
-    }
-
-    componentDidMount() {
-        if(this.props.isRefrsh){
-            this.fetchFeedbackData(this.state.feedbackListPage);
-        }else{
-            // Fetch data for the initial page (e.g., page 1)
-            this.fetchFeedbackData(this.state.currentPage);
+    componentDidUpdate(prevProps) {
+        if (prevProps.isRefresh !== this.props.isRefresh) {
+            console.log('list refreshFeedbackList', this.props.isRefresh);
+            console.log('list props isRefresh', this.props.isRefresh);
+            if (this.props.isRefresh) {
+                console.log('refresh FeedbackList', this.props.isRefresh);
+                this.fetchFeedbackListData(this.state.currentPage);
+                // Set isRefresh to false after fetching data
+               // this.props.onRefreshComplete();
+            }
         }
     }
 
-    fetchFeedbackData(page) {
+    handleItemClick = (status) => {
+        // Make a PATCH request to update the status
+        this.updateStatus(status);
+        // Call the parent component's callback function
+        this.props.onItemClick();
+    }
+
+
+    componentDidMount() {
+        // Fetch data for the initial page (e.g., page 1)
+        this.fetchFeedbackListData(this.state.currentPage);
+        console.log("list componentDidMount", this.state.refreshFeedbackList)
+    }
+
+    handleFeedbackListPageChange = (newPage) => {
+        console.log("list 72", newPage)
+        this.fetchFeedbackListData(newPage);
+    }
+
+
+    fetchFeedbackListData(page) {
         // Make a request to your API
         fetch(`${this.apiUrl}/feedback?page=${page}&pageSize=2`,{
             headers: {
@@ -49,38 +67,33 @@ class FeedbackListCard extends Component {
             });
     }
 
-    handlePageChange(newPage) {
-        console.log('New page:', newPage);
-        this.fetchFeedbackData(newPage);
 
-    }
 
     updateStatus = (feedback) => {
-        if(feedback.status === 2){
-            return;
-        }
-        const updateUrl = `${this.apiUrl}/feedback/${feedback.id}`;
-
-        fetch(updateUrl, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            },
-            body: JSON.stringify({
-                id: feedback.id,
-                status: 1, // Update the status as needed (e.g., 1 for read)
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle success or error response as needed
-                console.log('Status updated successfully:', data);
+        if(feedback.status === 0){
+            const updateUrl = `${this.apiUrl}/feedback/update/${feedback.id}`;
+            fetch(updateUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+                body: JSON.stringify({
+                    id: feedback.id,
+                    status: 1, // Update the status as needed (e.g., 1 for read)
+                }),
             })
-            .catch(error => {
-                // Handle error
-                console.error('Error updating status:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // Handle success or error response as needed
+                    console.log('Status updated successfully:', data);
+                    this.fetchFeedbackData(this.state.currentPage);
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('Error updating status:', error);
+                });
+        }
     };
 
 
@@ -125,6 +138,9 @@ class FeedbackListCard extends Component {
     }
 
 
+
+
+
     render() {
         let { feedbackData, currentPage, totalPages } = this.state;
 
@@ -141,7 +157,7 @@ class FeedbackListCard extends Component {
                             <li className={`page-item ${currentPage == 1 ? 'disabled' : ''}`}>
                                 <button
                                     className="page-link"
-                                    onClick={() => this.handlePageChange(currentPage - 1)}
+                                    onClick={() => this.handleFeedbackListPageChange(currentPage - 1)}
                                 >
                                     «
                                 </button>
@@ -153,7 +169,7 @@ class FeedbackListCard extends Component {
                                 >
                                     <button
                                         className={`page-link`}
-                                        onClick={() => this.handlePageChange(index + 1)}
+                                        onClick={() => this.handleFeedbackListPageChange(index + 1)}
                                     >
                                         {index + 1}
                                     </button>
@@ -162,7 +178,7 @@ class FeedbackListCard extends Component {
                             <li className={`page-item ${currentPage == totalPages ? 'disabled' : ''}`}>
                                 <button
                                     className="page-link"
-                                    onClick={() => this.handlePageChange(parseInt(currentPage, 10) + 1)}
+                                    onClick={() => this.handleFeedbackListPageChange(parseInt(currentPage, 10) + 1)}
                                 >
                                     »
                                 </button>
@@ -173,11 +189,14 @@ class FeedbackListCard extends Component {
                 <div className="card-body">
                     <ul className="todo-list" data-widget="todo-list">
                         {feedbackData.map((feedback) => (
-                            <li key={feedback.id} onClick={() => this.handleItemClick(feedback, currentPage)} >
-                                <span className="text">{feedback.title}</span>
-                                <small className={`badge ${this.renderTimeDifference(feedback.created_at, feedback.status).badgeColor}`}>
-                                    <i className="far fa-clock"/> {this.renderTimeDifference(feedback.created_at, feedback.status).text}
-                                </small>
+                            <li key={feedback.id}  className="todo-list-item" onClick={() => this.handleItemClick(feedback.status)} >
+                            {/*<li key={feedback.id} className="todo-list-item">*/}
+                                <Link to={`/feedback?itemId=${feedback.id}&currentPage=${currentPage}&status=${feedback.status}`}>
+                                    <span className="text">{feedback.title}</span>
+                                    <small className={`badge ${this.renderTimeDifference(feedback.created_at, feedback.status).badgeColor}`}>
+                                        <i className="far fa-clock"/> {this.renderTimeDifference(feedback.created_at, feedback.status).text}
+                                    </small>
+                                </Link>
                             </li>
                         ))}
                     </ul>

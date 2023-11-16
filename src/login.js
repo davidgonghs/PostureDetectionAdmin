@@ -8,11 +8,13 @@ const Login = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState("")
+    const [loading, setLoading] = useState(false); // Add loading state
 
     const navigate = useNavigate();
     const onButtonClick = () => {
         console.log('username:', username)
-
+        // Set loading to true when the login button is clicked
+        setLoading(true);
         // Set initial error values to empty
         //   setUsernameError("")
         setPasswordError("")
@@ -30,11 +32,13 @@ const Login = (props) => {
 
         if ("" === password) {
             setPasswordError("Please enter a password")
+            setLoading(false);
             return
         }
 
         if (password.length < 8) {
-            setPasswordError("The password must be 8 characters or longer")
+            setPasswordError("your password must be at least 8 characters, please try again")
+            setLoading(false);
             return
         }
 
@@ -68,8 +72,10 @@ const Login = (props) => {
                     navigate("/")
                 } else {
                     // Handle login failure
-                    console.error('Login failed:', r.message);
-                    window.alert("Wrong username or password")
+                   // console.error('Login failed:', r.message);
+                  //  window.alert("Wrong username or password")
+                    setPasswordError("Wrong username or password, please try again, \t\r if you forgot password, please contact engineer")
+                    setLoading(false); // Set loading to false when the request is completed
                 }
             })
     }
@@ -100,7 +106,6 @@ const Login = (props) => {
                                     <span className="fas fa-lock"/>
                                 </div>
                             </div>
-
                             <label className="errorLabel" style={{ color: 'red' }}>{passwordError}</label>
                         </div>
                         <div className="row">
@@ -112,7 +117,7 @@ const Login = (props) => {
                             </div>
                             <div className="col-4">
                                 <button type="button" className="btn btn-primary btn-block"
-                                        onClick={onButtonClick}>Login
+                                        onClick={onButtonClick}  disabled={loading}>  {loading ? 'Logging in...' : 'Login'}
                                 </button>
                             </div>
                             {/* /.col */}

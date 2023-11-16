@@ -8,6 +8,7 @@ class User extends Component {
             webUsers: [], // To store the fetched data
             currentPage: '1', // Initialize currentPage as a string
             totalPages: 1,
+            searchQuery: '', // Add searchQuery state
         };
     }
 
@@ -62,8 +63,25 @@ class User extends Component {
         // Add your logic for 'Delete' action here
     };
 
+
+
+    handleSearchChange = (event) => {
+        // Update searchQuery state when the search input changes
+        this.setState({ searchQuery: event.target.value });
+    };
+
+    handleSearch = () => {
+        // Trigger a new fetch with the search query
+        this.fetchData(this.state.currentPage, this.state.searchQuery);
+    };
+
+    handleAddUser = () => {
+        // Add your logic for adding a new user here
+        console.log('Add user logic');
+    };
+
     render() {
-        const { webUsers, currentPage, totalPages } = this.state;
+        const { webUsers, currentPage, totalPages, searchQuery } = this.state;
         return (
             <div>
                 <div className="content-wrapper">
@@ -99,6 +117,23 @@ class User extends Component {
                                     <div className="card">
                                         <div className="card-header">
                                             <h3 className="card-title">User Table</h3>
+                                            <div className="card-tools">
+                                                <div className="input-group input-group-sm" style={{ width: '150px' }}>
+                                                    <input
+                                                        type="text"
+                                                        name="table_search"
+                                                        className="form-control float-right"
+                                                        placeholder="Search By Email"
+                                                        value={searchQuery}
+                                                        onChange={this.handleSearchChange}
+                                                    />
+                                                    <div className="input-group-append">
+                                                        <button className="btn btn-default" onClick={this.handleSearch}>
+                                                            <i className="fas fa-search" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="card-body">
                                             <table className="table table-bordered">
@@ -124,14 +159,14 @@ class User extends Component {
                                                             />
                                                         </td>
                                                         <td className="project-actions text-right">
-                                                            <button className="btn btn-sm"
+                                                            <button className="btn btn-primary btn-sm"
                                                                 onClick={() => this.handleView(user.id)} >
                                                                 <i className="fas fa-folder">
                                                                 </i>
                                                                 View
                                                             </button>
                                                             <button
-                                                                className="btn btn-sm"
+                                                                className="btn btn-info btn-sm"
                                                                 onClick={() => this.handleEdit(user.id)}
                                                             >
                                                                 <i className="fas fa-pencil-alt">
@@ -139,7 +174,7 @@ class User extends Component {
                                                                 Edit
                                                             </button>
                                                             <button
-                                                                className="btn btn-sm"
+                                                                className="btn btn-danger btn-sm"
                                                                 onClick={() => this.handleDelete(user.id)}
                                                             >
                                                                 <i className="fas fa-trash">
@@ -183,6 +218,9 @@ class User extends Component {
                                                     </button>
                                                 </li>
                                             </ul>
+                                            <button className="btn btn-success float-left" onClick={this.handleAddUser}>
+                                                Add User
+                                            </button>
                                         </div>
                                     </div>
                                 </section>

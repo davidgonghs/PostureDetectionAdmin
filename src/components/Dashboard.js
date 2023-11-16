@@ -3,12 +3,13 @@ import FeedbackListCard from "./FeedbackListCard";
 import ActivityUserGraphCard from "./ActivityUserGraphCard";
 import NewUserGraphCard from "./NewUserGraphCard";
 import SmallBoxesContent from "./SmallBoxesContent";
+import { redirect,useNavigate } from "react-router-dom";
+
 class Dashboard extends Component {
 
-    handleItemClick = (itemId,currentPage=1) => {
-        // Do something with the clicked item ID
-        console.log(`Item clicked: ${itemId}`);
-        // Add your logic here
+
+    handleItemClick = () => {
+
     };
 
 
@@ -55,7 +56,7 @@ class Dashboard extends Component {
                                     {/* /.card */}
 
                                     {/* TO DO List */}
-                                    <FeedbackListCard  onItemClick={this.handleItemClick}/>
+                                    <FeedbackListCard onItemClick={this.handleItemClick}/>
                                     {/* /.card */}
                                 </section>
                                 {/* /.Left col */}
@@ -63,7 +64,7 @@ class Dashboard extends Component {
                                 <section className="col-lg-5 connectedSortable">
 
                                     {/* solid sales graph */}
-                                    <NewUserGraphCard/>
+                                    <NewUserGraphCard />
                                     {/* /.card */}
 
 

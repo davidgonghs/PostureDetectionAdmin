@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 export default class  SmallBoxesContent extends Component {
 
     constructor() {
@@ -44,6 +45,23 @@ export default class  SmallBoxesContent extends Component {
     render() {
         return (
             <div className="row">
+                {/* New Feedback */}
+                <div className="col-lg-3 col-6">
+                    {/* small box */}
+                    <div className="small-box bg-danger">
+                        <div className="inner">
+                            <h3>{this.state.feedback}</h3>
+                            <p>New Feedback</p>
+                        </div>
+                        <div className="icon">
+                            <i className="ion ion-chatbox-working" />
+                        </div>
+                        <Link href="/user" className="small-box-footer">
+                            More info <i className="fas fa-arrow-circle-right" />
+                        </Link>
+                    </div>
+                </div>
+                {/* Total User */}
                 <div className="col-lg-3 col-6">
                     {/* small box */}
                     <div className="small-box bg-info">
@@ -54,12 +72,12 @@ export default class  SmallBoxesContent extends Component {
                         <div className="icon">
                             <i className="ion ion-person" />
                         </div>
-                        <a href="#" className="small-box-footer">
+                        <Link href="/feedback" className="small-box-footer">
                             More info <i className="fas fa-arrow-circle-right" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
-                {/* ./col */}
+                {/* Activity User */}
                 <div className="col-lg-3 col-6">
                     {/* small box */}
                     <div className="small-box bg-success">
@@ -72,12 +90,12 @@ export default class  SmallBoxesContent extends Component {
                         <div className="icon">
                             <i className="ion ion-ios-pulse" />
                         </div>
-                        <a href="#" className="small-box-footer">
-                            More info <i className="fas fa-arrow-circle-right" />
-                        </a>
+                        <Link href="#" className="small-box-footer">
+                            {/*More info <i className="fas fa-arrow-circle-right" />*/}
+                        </Link>
                     </div>
                 </div>
-                {/* ./col */}
+                {/* New User */}
                 <div className="col-lg-3 col-6">
                     {/* small box */}
                     <div className="small-box bg-warning">
@@ -88,28 +106,12 @@ export default class  SmallBoxesContent extends Component {
                         <div className="icon">
                             <i className="ion ion-person-add" />
                         </div>
-                        <a href="#" className="small-box-footer">
-                            More info <i className="fas fa-arrow-circle-right" />
-                        </a>
+                        <Link href="#" className="small-box-footer">
+                            {/*More info <i className="fas fa-arrow-circle-right" />*/}
+                        </Link>
                     </div>
                 </div>
-                {/* ./col */}
-                <div className="col-lg-3 col-6">
-                    {/* small box */}
-                    <div className="small-box bg-danger">
-                        <div className="inner">
-                            <h3>{this.state.feedback}</h3>
-                            <p>New Feedback</p>
-                        </div>
-                        <div className="icon">
-                            <i className="ion ion-chatbox-working" />
-                        </div>
-                        <a href="#" className="small-box-footer">
-                            More info <i className="fas fa-arrow-circle-right" />
-                        </a>
-                    </div>
-                </div>
-                {/* ./col */}
+
             </div>
         );
 

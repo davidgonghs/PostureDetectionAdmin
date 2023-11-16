@@ -8,41 +8,65 @@ class FeedbackChartCard extends Component {
         this.state = {
             feedbackData: [],
             parentId: this.props.parentId,
+            status: this.props.status,
+            key: true
         };
+
     }
 
 
 
     componentDidMount() {
         // Fetch data when the component mounts
+        this.handleChange();
         this.fetchFeedbackData(this.props.parentId); // Use the parentId passed as a prop
     }
 
     componentDidUpdate(prevProps) {
         // Fetch data if parentId prop is updated
-        if (this.props.parentId !== prevProps.parentId) {
+        if (this.props.parentId != prevProps.parentId) {
+            this.handleChange();
             this.fetchFeedbackData(this.props.parentId);
         }
+    }
+
+    handleChange() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const itemId = urlParams.get('itemId');
+        const status = urlParams.get('status');
+        let key = false;
+        if (status === 2 || status === "2" || status === null){
+            key = true;
+        }
+        this.setState({
+            parentId: itemId,
+            status: status,
+            key: key
+        })
     }
 
     fetchFeedbackData = async (parentId) => {
         try {
             // Make a request to your API with the parentId
-            const response = await fetch(`${this.apiUrl}/feedback/parent/${parentId}`);
+            const response = await fetch(`${this.apiUrl}/feedback/parent/${parentId}`,{
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+            });
             const data = await response.json();
 
             // Update state with the fetched data
             this.setState({ feedbackData: data.data });
-
         } catch (error) {
             console.error('Error fetching feedback data:', error);
         }
     };
 
-    handleStatusUpdate = () => {
+    handleStatusUpdate = (statusValue) => {
         // Add logic to make a PATCH request to update feedback status to 2
         const feedbackId = this.props.parentId; // Replace with the actual feedback ID
-        fetch(`${this.apiUrl}/feedback/${feedbackId}`, {
+        fetch(`${this.apiUrl}/feedback/update/${feedbackId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,13 +74,23 @@ class FeedbackChartCard extends Component {
             },
             body: JSON.stringify({
                 id: feedbackId,
-                status: 2
+                status: +statusValue
             }),
         })
             .then(response => response.json())
             .then(data => {
                 // Handle the response, you may update state or perform other actions
-                console.log('Feedback status updated:', data);
+             //   console.log('Feedback status updated:', data);
+                let key = false;
+                if (statusValue === 2 || statusValue === "2" || statusValue === null){
+                    key = true;
+                }
+                this.setState({
+                    key: key,
+                    status: statusValue
+                })
+                console.log('fb chart onRefresh')
+                this.props.onRefresh();
             })
             .catch(error => {
                 console.error('Error updating feedback status:', error);
@@ -92,34 +126,60 @@ class FeedbackChartCard extends Component {
     }
 
 
-
-    render() {
-        const { feedbackData } = this.state;
-        return (
-            <div className="card direct-chat direct-chat-primary">
-                <div className="card-header">
-                    <h3 className="card-title">Feedback Chat</h3>
-                    <div className="card-tools">
+    renderHeader() {
+        const { feedbackData, status } = this.state;
+        const hidden = status !== 2;
+        return(
+            <>
+                <h3 className="card-title">Feedback Chat</h3>
+                <div className="card-tools">
       <span title="3 New Messages" className="badge badge-primary">
         {feedbackData.length}
       </span>
-                        <button
-                            type="button"
-                            className="btn btn-tool"
-                            data-card-widget="collapse"
-                        >
-                            <i className="fas fa-minus"/>
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-tool"
-                            title="Done"
-                            data-widget="chat-pane-toggle"
-                            onClick={this.handleStatusUpdate()}
-                        >
-                            <i className="fas fa-check-circle"/>
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        className="btn btn-tool"
+                        data-card-widget="collapse"
+                    >
+                        <i className="fas fa-minus"/>
+                    </button>
+
+                    <button
+                        hidden={this.state.key}
+                        type="button"
+                        className="btn btn-tool"
+                        title="Done"
+                        onClick={() =>this.handleStatusUpdate(2)}
+                    >
+                        <i className="fas fa-check-circle"/>
+                    </button>
+
+                    <button
+                        hidden={!this.state.key}
+                        type="button"
+                        className="btn btn-tool"
+                        title="ReOpen"
+                        onClick={() =>this.handleStatusUpdate(1)}
+                    >
+                        <i className="fas fa-undo"/>
+                    </button>
+
+                </div>
+            </>
+
+            );
+
+    }
+
+
+
+    render() {
+        const { status } = this.state;
+
+        return (
+            <div className="card direct-chat direct-chat-primary">
+                <div className="card-header">
+                    {this.renderHeader()}
                 </div>
                 {/* /.card-header */}
                 <div className="card-body">
@@ -140,7 +200,7 @@ class FeedbackChartCard extends Component {
                                 className="form-control"
                             />
                             <span className="input-group-append">
-          <button type="button" className="btn btn-primary">
+          <button type="button" className="btn btn-primary"  disabled={this.state.key}>
             Send
           </button>
         </span>
@@ -151,7 +211,6 @@ class FeedbackChartCard extends Component {
                 </div>
                 {/* /.card-footer*/}
             </div>
-
         );
     }
 }

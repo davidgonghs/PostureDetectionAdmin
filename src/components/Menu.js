@@ -6,6 +6,14 @@ import Dashboard from './Dashboard'; // Import your Dashboard component
 import User from './User'; // Import your User component
 
 export default class Menu extends Component {
+    handleLogout = () => {
+        // Clear localStorage
+        localStorage.clear();
+
+        // Refresh the page
+        window.location.reload();
+    };
+
     render() {
         return (
             <div>
@@ -71,6 +79,14 @@ export default class Menu extends Component {
                                         <i className="nav-icon fas fa-question"/>
                                         <p>
                                             Help
+                                        </p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/" className="nav-link" onClick={this.handleLogout}>
+                                        <i className="nav-icon fas fa-arrow-right"/>
+                                        <p>
+                                            Logout
                                         </p>
                                     </Link>
                                 </li>

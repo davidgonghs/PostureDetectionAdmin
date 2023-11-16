@@ -1,31 +1,67 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import FeedbackListCard from "./FeedbackListCard";
 import FeedbackChartCard from "./FeedbackChartCard";
+import Child from "./Child";
 
 class Feedback extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.apiUrl = process.env.REACT_APP_API_URL;
+        this.feedbackListCardRef = createRef();
         this.state = {
-            selectedParentId: null,
-            refreshFeedbackList: false,
+            parentId: 1,
+            refreshList: false,
             feedbackListPage: 1,
+            status: null,
+            queryString: window.location.search
         };
     }
 
-    handleItemClick = (parentId,currentPage=1) => {
-        // Do something with the clicked item ID
-        console.log(`Item clicked: ${parentId}`);
-        this.setState({ selectedParentId: parentId, feedbackListPage: currentPage });
-        // Add your logic here
+    handleItemClick = () => {
+        this.handleChange();
     };
 
+    handleRefresh = () => {
+        console.log('feedback 23 handleRefresh')
 
-    handleRefreshFeedbackData = () => {
-        this.setState({ refreshFeedbackList: true });
-    //     refresh current page
+        this.setState({
+            refreshList: true
+        })
+        if (this.state.refreshList) {
+            console.log('feedback feedbackListCardRef')
+            this.feedbackListCardRef.current.fetchFeedbackListData(this.state.feedbackListPage);
+            this.setState({
+                refreshList: false
+            })
+        }
+    }
 
 
+    componentDidMount() {
+        this.handleChange();
+    }
+
+    componentDidUpdate(prevProps,prevState) {
+        if (this.state.queryString !== prevState.queryString) {
+            console.log('queryString update',this.state.queryString)
+            this.handleChange();
+        }
+    }
+
+
+
+    handleChange() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const itemId = urlParams.get('itemId');
+        const currentPage = urlParams.get('currentPage');
+        const status = urlParams.get('status');
+
+        this.setState({
+            parentId: itemId,
+            feedbackListPage: currentPage,
+            status: status
+        })
     }
 
     render() {
@@ -59,14 +95,17 @@ class Feedback extends Component {
                             <div className="row">
                                 <section className="col-lg-7 connectedSortable">
                                     {/* TO DO List */}
-                                    <FeedbackListCard  onItemClick={this.handleItemClick} />
+                                    <FeedbackListCard
+                                        onItemClick={this.handleItemClick}
+                                        isRefresh={this.state.refreshList}
+                                    />
                                     {/* /.card */}
                                 </section>
                                 {/* /.Left col */}
                                 {/* right col (We are only adding the ID to make the widgets sortable)*/}
                                 <section className="col-lg-5 connectedSortable">
                                     {/* solid sales graph */}
-                                    <FeedbackChartCard parentId={this.state.selectedParentId}  />
+                                    <FeedbackChartCard parentId={this.state.parentId} status={this.state.status} onRefresh={this.handleRefresh}/>
                                     {/* /.card */}
                                 </section>
                             </div>
