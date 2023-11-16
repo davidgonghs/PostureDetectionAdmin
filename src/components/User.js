@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PopupUser from "./PopupUser";
+import PopupResetPassword from "./PopupResetPassword";
 
 class User extends Component {
     constructor() {
@@ -11,6 +12,7 @@ class User extends Component {
             totalPages: 1,
             searchQuery: '', // Add searchQuery state
             isPopupOpen: false, // New state to manage the visibility of the popup form
+            isResetPasswordPopupOpen: false,
             popupMode: 'add', // 'add', 'edit', or 'view'
             selectedUser: null,
         };
@@ -60,9 +62,33 @@ class User extends Component {
     };
 
 
-    handleDelete = (projectId) => {
-        console.log(`Delete project with ID: ${projectId}`);
+    handleDelete = (userId) => {
+        console.log(`Delete project with ID: ${userId}`);
         // Add your logic for 'Delete' action here
+        //show window confirm
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            fetch(`${this.apiUrl}/user/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Check if the response data is an object with the expected structure
+                    if (data.status === 200) {
+                        // Update the component's state with the fetched data
+                        this.fetchData(this.state.currentPage);
+                    } else {
+                        // Handle the case where the response is not as expected
+                        console.error('Unexpected response format:', data);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
     };
 
     handleSubmitUser = (formData) => {
@@ -70,7 +96,7 @@ class User extends Component {
         console.log('New user data:', formData);
 
         // Close the popup form after submission
-        this.setState({ isPopupOpen: false });
+        this.setState({ isPopupOpen: false, isResetPasswordPopupOpen: false });
     };
 
 
@@ -87,13 +113,20 @@ class User extends Component {
 
 
     handleCancel = () => {
-        this.setState({ isPopupOpen: false });
+        this.setState({
+            isPopupOpen: false,
+            isResetPasswordPopupOpen: false,
+        });
     };
+
+    handlePopupResetPassword = (user) => {
+        this.setState({ isResetPasswordPopupOpen: true, selectedUser: user });
+    }
 
 
 
     render() {
-        const { webUsers, currentPage, totalPages, searchQuery, isPopupOpen, selectedUser, popupMode   } = this.state;
+        const { webUsers, currentPage, totalPages, searchQuery, isPopupOpen, isResetPasswordPopupOpen, selectedUser, popupMode   } = this.state;
         return (
             <div>
                 <div className="content-wrapper">
@@ -200,7 +233,9 @@ class User extends Component {
                                                             </button>
                                                             <button
                                                                 className="btn btn-warning btn-sm"
-                                                                onClick={() => this.handlePopupUser('delete', user.id)}
+                                                                onClick={() => this.handlePopupResetPassword(user)}
+                                                                data-toggle="modal"
+                                                                data-target="#resetPasswordModal"
                                                             >
                                                                 <i className="fas fa-lock">
                                                                 </i>
@@ -270,6 +305,16 @@ class User extends Component {
                         onCancel={this.handleCancel}
                     />
                 )}
+
+                {isResetPasswordPopupOpen && (
+                    <PopupResetPassword
+                        user={selectedUser}
+                        onSubmit={this.handleSubmitUser}
+                        onCancel={this.handleCancel}
+                    />
+                )}
+
+
             </div>
         );
     }

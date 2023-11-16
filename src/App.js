@@ -8,6 +8,7 @@ import User from "./components/User";
 import UserLog from "./components/UserLog";
 import Footer from "./components/Footer";
 import Feedback from "./components/Feedback";
+import Help from "./components/Help";
 
 function App() {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -55,6 +56,7 @@ function App() {
                 <Route path="/" element={loggedIn ? <Dashboard /> : <Navigate to="/login" />} />
                 <Route path="/user" element={loggedIn ? <User /> : <Navigate to="/login" />} />
                 <Route path="/feedback" element={loggedIn ? <Feedback /> : <Navigate to="/login" />} />
+                <Route path="/help" element={loggedIn ? <Help /> : <Navigate to="/login" />} />
             </Routes>
             {loggedIn && <Footer/>}
         </div>

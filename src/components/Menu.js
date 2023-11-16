@@ -16,7 +16,6 @@ export default class Menu extends Component {
 
     render() {
         return (
-            <div>
                 <aside className="main-sidebar sidebar-dark-primary elevation-4">
                     {/* Brand Logo */}
                     <a href="index.html" className="brand-link">
@@ -43,7 +42,7 @@ export default class Menu extends Component {
                                 {/* Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library */}
                                 <li className="nav-item">
-                                    <Link to="/" className="nav-link ">
+                                    <Link to="/" className="nav-link" activeClassName="active">
                                         <i className="nav-icon fas fa-tachometer-alt"/>
                                         <p>
                                             Dashboard
@@ -58,14 +57,6 @@ export default class Menu extends Component {
                                         </p>
                                     </Link>
                                 </li>
-                                {/*<li className="nav-item">*/}
-                                {/*    <Link to="/userLog" className="nav-link">*/}
-                                {/*        <i className="nav-icon fas fa-clipboard"></i>*/}
-                                {/*        <p>*/}
-                                {/*            User Log*/}
-                                {/*        </p>*/}
-                                {/*    </Link>*/}
-                                {/*</li>*/}
                                 <li className="nav-item">
                                     <Link to="/feedback" className="nav-link">
                                         <i className="nav-icon fas fa-comment-alt"/>
@@ -96,7 +87,6 @@ export default class Menu extends Component {
                     </div>
                     {/* /.sidebar */}
                 </aside>
-            </div>
         )
     }
 }
