@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PopupUser from "./PopupUser";
 
 class User extends Component {
     constructor() {
@@ -9,6 +10,9 @@ class User extends Component {
             currentPage: '1', // Initialize currentPage as a string
             totalPages: 1,
             searchQuery: '', // Add searchQuery state
+            isPopupOpen: false, // New state to manage the visibility of the popup form
+            popupMode: 'add', // 'add', 'edit', or 'view'
+            selectedUser: null,
         };
     }
 
@@ -48,19 +52,25 @@ class User extends Component {
     };
 
 
-    handleView = (projectId) => {
-        console.log(`View project with ID: ${projectId}`);
-        // Add your logic for 'View' action here
+    handlePopupUser = (mode,user=null) => {
+        this.setState({ isPopupOpen: true, popupMode: mode, selectedUser: user });
+        console.log('mode',mode)
+        // if (projectId === 0)
+        //     console.log('add')
     };
 
-    handleEdit = (projectId) => {
-        console.log(`Edit project with ID: ${projectId}`);
-        // Add your logic for 'Edit' action here
-    };
 
     handleDelete = (projectId) => {
         console.log(`Delete project with ID: ${projectId}`);
         // Add your logic for 'Delete' action here
+    };
+
+    handleSubmitUser = (formData) => {
+        // Add logic for handling the new user data (e.g., API call)
+        console.log('New user data:', formData);
+
+        // Close the popup form after submission
+        this.setState({ isPopupOpen: false });
     };
 
 
@@ -75,13 +85,15 @@ class User extends Component {
         this.fetchData(this.state.currentPage, this.state.searchQuery);
     };
 
-    handleAddUser = () => {
-        // Add your logic for adding a new user here
-        console.log('Add user logic');
+
+    handleCancel = () => {
+        this.setState({ isPopupOpen: false });
     };
 
+
+
     render() {
-        const { webUsers, currentPage, totalPages, searchQuery } = this.state;
+        const { webUsers, currentPage, totalPages, searchQuery, isPopupOpen, selectedUser, popupMode   } = this.state;
         return (
             <div>
                 <div className="content-wrapper">
@@ -160,14 +172,19 @@ class User extends Component {
                                                         </td>
                                                         <td className="project-actions text-right">
                                                             <button className="btn btn-primary btn-sm"
-                                                                onClick={() => this.handleView(user.id)} >
+                                                                onClick={() => this.handlePopupUser('view',user)}
+                                                                    data-toggle="modal"
+                                                                    data-target="#modal-lg"
+                                                            >
                                                                 <i className="fas fa-folder">
                                                                 </i>
                                                                 View
                                                             </button>
                                                             <button
                                                                 className="btn btn-info btn-sm"
-                                                                onClick={() => this.handleEdit(user.id)}
+                                                                onClick={() => this.handlePopupUser('edit',user)}
+                                                                data-toggle="modal"
+                                                                data-target="#modal-lg"
                                                             >
                                                                 <i className="fas fa-pencil-alt">
                                                                 </i>
@@ -175,11 +192,19 @@ class User extends Component {
                                                             </button>
                                                             <button
                                                                 className="btn btn-danger btn-sm"
-                                                                onClick={() => this.handleDelete(user.id)}
+                                                                onClick={() => this.handleDelete('delete', user.id)}
                                                             >
                                                                 <i className="fas fa-trash">
                                                                 </i>
                                                                 Delete
+                                                            </button>
+                                                            <button
+                                                                className="btn btn-warning btn-sm"
+                                                                onClick={() => this.handlePopupUser('delete', user.id)}
+                                                            >
+                                                                <i className="fas fa-lock">
+                                                                </i>
+                                                                Reset password
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -218,7 +243,11 @@ class User extends Component {
                                                     </button>
                                                 </li>
                                             </ul>
-                                            <button className="btn btn-success float-left" onClick={this.handleAddUser}>
+                                            <button className="btn btn-success float-left"
+                                                    onClick={()=>this.handlePopupUser('add')}
+                                                    data-toggle="modal"
+                                                    data-target="#modal-lg"
+                                            >
                                                 Add User
                                             </button>
                                         </div>
@@ -232,6 +261,15 @@ class User extends Component {
                     {/* /.content */}
                 </div>
                 {/* ... (your existing code) ... */}
+
+                {isPopupOpen && (
+                    <PopupUser
+                        mode={popupMode}
+                        user={selectedUser}
+                        onSubmit={this.handleSubmitUser}
+                        onCancel={this.handleCancel}
+                    />
+                )}
             </div>
         );
     }
