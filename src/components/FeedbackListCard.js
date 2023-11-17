@@ -67,7 +67,7 @@ class FeedbackListCard extends Component {
 
 
     updateStatus = (feedback) => {
-        if(feedback.status === 0){
+        if(feedback.status == 0){
             const updateUrl = `${this.apiUrl}/feedback/update/${feedback.id}`;
             fetch(updateUrl, {
                 method: 'PUT',

@@ -24,6 +24,7 @@ class FeedbackChartCard extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.parentId !== prevProps.parentId) {
+            this.handleChange();
             this.fetchFeedbackData(this.props.parentId); // Use the parentId passed as a prop
         }
     }
@@ -140,7 +141,10 @@ class FeedbackChartCard extends Component {
 
     renderHeader() {
         const { feedbackData, status } = this.state;
+        console.log('fc')
+        console.log(status)
         const hidden = status !== 2;
+        console.log(hidden)
         return(
             <>
                 <h3 className="card-title">Feedback Chat</h3>
@@ -157,7 +161,7 @@ class FeedbackChartCard extends Component {
                     </button>
 
                     <button
-                        hidden={this.state.key}
+                        hidden={ status == 1 || status == 0}
                         type="button"
                         className="btn btn-tool"
                         title="Done"
@@ -167,7 +171,7 @@ class FeedbackChartCard extends Component {
                     </button>
 
                     <button
-                        hidden={!this.state.key}
+                        hidden={ status == 2}
                         type="button"
                         className="btn btn-tool"
                         title="ReOpen"

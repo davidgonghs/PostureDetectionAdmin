@@ -56,7 +56,7 @@ export default class  SmallBoxesContent extends Component {
                         <div className="icon">
                             <i className="ion ion-chatbox-working" />
                         </div>
-                        <Link href="/user" className="small-box-footer">
+                        <Link to="/feedback" className="small-box-footer">
                             More info <i className="fas fa-arrow-circle-right" />
                         </Link>
                     </div>
@@ -72,7 +72,7 @@ export default class  SmallBoxesContent extends Component {
                         <div className="icon">
                             <i className="ion ion-person" />
                         </div>
-                        <Link href="/feedback" className="small-box-footer">
+                        <Link to="/user" className="small-box-footer">
                             More info <i className="fas fa-arrow-circle-right" />
                         </Link>
                     </div>
