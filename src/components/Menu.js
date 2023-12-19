@@ -59,7 +59,7 @@ export default class Menu extends Component {
                                 </li>
                                 <li className="nav-item">
                                     <Link to="/userlog" className="nav-link">
-                                        <i className="nav-icon fas fa-user"/>
+                                        <i className="nav-icon fas fa-eye"/>
                                         <p>
                                             User Log
                                         </p>
