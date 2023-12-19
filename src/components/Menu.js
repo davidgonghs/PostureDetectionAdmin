@@ -58,6 +58,14 @@ export default class Menu extends Component {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
+                                    <Link to="/userlog" className="nav-link">
+                                        <i className="nav-icon fas fa-user"/>
+                                        <p>
+                                            User Log
+                                        </p>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link to="/feedback" className="nav-link">
                                         <i className="nav-icon fas fa-comment-alt"/>
                                         <p>

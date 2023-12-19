@@ -10,9 +10,10 @@ class UserLog extends Component {
     }
 
 
-    fetchData = (country) => {
+    fetchData = () => {
         // Construct the URL with the selected country
         const apiUrl = `https://api.posturedetection.com/user-log`;
+        console.log(apiUrl)
         fetch(apiUrl,{
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -20,13 +21,14 @@ class UserLog extends Component {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data)
                 // Check if the response data is an array
-                if (Array.isArray(data)) {
+                if (Array.isArray(data.data)) {
                     // Update the component's state with the fetched data
-                    this.setState({ userLogs: data });
+                    this.setState({ userLogs: data.data });
                 } else {
                     // Handle the case where the response is not an array (error or unexpected response)
-                    console.error('Unexpected response format:', data);
+                    console.error('Unexpected response format:', data.data);
                     // You can choose to handle errors or unexpected responses here.
                 }
             })
@@ -36,6 +38,9 @@ class UserLog extends Component {
             });
     };
 
+    componentDidMount() {
+        this.fetchData();
+    }
 
     // handleCountryChange = (event) => {
     //     const selectedCountry = event.target.value;
@@ -79,8 +84,8 @@ class UserLog extends Component {
                                         <div className="card-header">
                                             <h3 className="card-title">User Log Table</h3>
                                         </div>
-                                        <div className="card-body">
-                                            <table className="table table-bordered">
+                                        <div className="card-body table-responsive p-0">
+                                            <table className="table table-hover text-nowrap">
                                                 <thead>
                                                 <tr>
                                                     <th>User Name</th>
@@ -104,15 +109,6 @@ class UserLog extends Component {
                                                 ))}
                                                 </tbody>
                                             </table>
-                                        </div>
-                                        <div className="card-footer clearfix">
-                                            <ul className="pagination pagination-sm m-0 float-right">
-                                                <li className="page-item"><a className="page-link" href="/#">«</a></li>
-                                                <li className="page-item"><a className="page-link" href="/#">1</a></li>
-                                                <li className="page-item"><a className="page-link" href="/#">2</a></li>
-                                                <li className="page-item"><a className="page-link" href="/#">3</a></li>
-                                                <li className="page-item"><a className="page-link" href="/#">»</a></li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </section>

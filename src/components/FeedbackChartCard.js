@@ -161,7 +161,7 @@ class FeedbackChartCard extends Component {
                     </button>
 
                     <button
-                        hidden={ status == 1 || status == 0}
+                        hidden={ status >= 2}
                         type="button"
                         className="btn btn-tool"
                         title="Done"
@@ -171,7 +171,7 @@ class FeedbackChartCard extends Component {
                     </button>
 
                     <button
-                        hidden={ status == 2}
+                        hidden={ status < 2}
                         type="button"
                         className="btn btn-tool"
                         title="ReOpen"

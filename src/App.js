@@ -55,6 +55,7 @@ function App() {
                 <Route path="/login" element={loggedIn ? <Navigate to="/" /> : <Login setLoggedIn={setLoggedIn} setUsername={setUsername} />} />
                 <Route path="/" element={loggedIn ? <Dashboard /> : <Navigate to="/login" />} />
                 <Route path="/user" element={loggedIn ? <User /> : <Navigate to="/login" />} />
+                <Route path="/userlog" element={loggedIn ? <UserLog /> : <Navigate to="/login" />} />
                 <Route path="/feedback" element={loggedIn ? <Feedback /> : <Navigate to="/login" />} />
                 <Route path="/help" element={loggedIn ? <Help /> : <Navigate to="/login" />} />
             </Routes>
